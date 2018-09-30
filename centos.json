@@ -1,0 +1,45 @@
+{
+  "builders": [
+    {
+        "name": "CentOS7",
+        "type": "vmware-iso",
+        "vm_name": "CentOS7",
+        "guest_os_type": "rhel7-64",
+        "ssh_username": "{{user `vm_user_name`}}",
+        "ssh_password": "{{user `vm_user_password`}}",
+        "ssh_timeout": "15m",
+        "iso_url": "{{user `iso_url`}}",
+        "iso_checksum":"{{user `iso_checksum`}}",
+        "iso_checksum_type": "{{user `iso_checksum_type`}}",
+        "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vm_password'|sudo -S sh 'shutdown.sh'",
+        "boot_command": [
+            "<tab> text biosdevname=0 net.ifnames=0 ks=hd:fd0:/centos7.ks<enter><wait>"
+        ],
+        "floppy_files": [
+          "floppy/centos7.ks"
+        ],
+        "tools_upload_flavor": "linux",
+        "headless": false,
+        "skip_export": true,
+        "keep_registered": true,
+        "remote_type": "esx5",
+        "remote_host": "{{user `esxi_host`}}",
+        "remote_datastore": "{{user `esxi_datastore`}}",
+        "remote_username": "{{user `esxi_username`}}",
+        "remote_password": "{{user `esxi_password`}}",
+        "remote_cache_directory":"packer_cache",
+        "disk_size": "{{user `vm_disk_size`}}",
+        "disk_type_id": "thin",
+        "vmx_data": {
+            "memsize": "{{user `vm_memory_size`}}",
+            "numvcpus": "{{user `vm_cpu_size`}}",
+            "ethernet0.networkName": "VM Network",
+            "ethernet0.present": "true",
+            "ethernet0.startConnected": "true",
+            "ethernet0.addressType": "static",
+            "ethernet0.Address": "{{user `vm_mac_address`}}",
+            "ethernet0.virtualDev": "e1000"
+        }
+    }
+  ]
+}

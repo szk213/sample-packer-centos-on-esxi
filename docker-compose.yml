@@ -1,0 +1,8 @@
+version: '3'
+services:
+  vm-build:
+    build: './'
+    volumes: 
+      - "$PWD:/tmp/work"
+    working_dir: /tmp/work
+    command: "packer build -var-file=/tmp/work/variables.json centos.json"
